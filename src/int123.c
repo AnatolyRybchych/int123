@@ -1,7 +1,7 @@
 #include <int123.h>
 
 #define IMPL_BIT_OPERATION(NAME, FIRST_OP, OPERATOR, SECOND_OP)\
-void intn_##NAME(void *result, const void *first, const void *second, size_t n){\
+void intn_##NAME(size_t n, void *result, const void *first, const void *second){\
     size_t long_size = n / sizeof(long);\
     for (size_t i = 0; i < long_size; i++){\
         ((unsigned long*)result)[i] =\
@@ -34,7 +34,7 @@ IMPL_BIT_OPERATION(nxor, ~, ^, )
 IMPL_BIT_OPERATION(xorn, , ^, ~)
 IMPL_BIT_OPERATION(nxorn, ~, ^, ~)
 
-bool parse_hex(void *num, size_t n, const char *str){
+bool intn_parse_hex(size_t n, void *num, const char *str){
     assert(n < 0x0fffffffffffffff);
 
     unsigned char *num_bytes = num;
@@ -55,7 +55,28 @@ bool parse_hex(void *num, size_t n, const char *str){
     return true;
 }
 
-bool intn_mul(void *restrict result, const void *restrict first, const void *restrict second, size_t n){
+void intn_print_hex(size_t n, const void *num){
+    const unsigned char *num_bytes = num;
+
+    size_t i = 0;
+
+    for (; i < n; i++){
+        if(num_bytes[i]){
+             break;
+        }
+    }
+
+    if(i == n){
+        putchar('0');
+        return;
+    }
+    
+    for (; i < n; i++){
+        printf("%02X", (int)num_bytes[i]);
+    }
+}
+
+bool intn_mul(size_t n, void *restrict result, const void *restrict first, const void *restrict second){
     assert(n < 0x0fffffffffffffff);
 
     unsigned char *result_bytes = result;
@@ -82,7 +103,7 @@ bool intn_mul(void *restrict result, const void *restrict first, const void *res
     return ret;
 }
 
-bool intn_add(void *result, const void *first, const void *second, size_t n){
+bool intn_add(size_t n, void *result, const void *first, const void *second){
     unsigned char *result_bytes = result;
     const unsigned char *first_bytes = first;
     const unsigned char *second_bytes = second;
@@ -96,7 +117,7 @@ bool intn_add(void *result, const void *first, const void *second, size_t n){
     return curr != 0;
 }
 
-void intn_shl_bytes(void *result, const void *val, size_t shift, size_t n){
+void intn_shl_bytes(size_t n, void *result, const void *val, size_t shift){
     size_t shift_cnt = n - shift;
     size_t long_shift_cnt = shift_cnt / sizeof(long);
     for (size_t i = 0; i < long_shift_cnt; i++){
@@ -112,10 +133,10 @@ void intn_shl_bytes(void *result, const void *val, size_t shift, size_t n){
     }
 }
 
-void intn_shl(void *result, const void *val, size_t shift, size_t n){
+void intn_shl(size_t n, void *result, const void *val, size_t shift){
     size_t shift_bytes = shift / 8;
     if(shift_bytes){
-        intn_shl_bytes(result, val, shift_bytes, n);
+        intn_shl_bytes(n, result, val, shift_bytes);
     }
 
     size_t shift_bits = shift % 8;
@@ -132,7 +153,7 @@ void intn_shl(void *result, const void *val, size_t shift, size_t n){
     ((unsigned char*)result)[n - 1] = curr;
 }
 
-void intn_shr_bytes(void *result, const void *val, size_t shift, size_t n){
+void intn_shr_bytes(size_t n, void *result, const void *val, size_t shift){
     size_t shift_cnt = n - shift;
     size_t long_shift_cnt = shift_cnt / sizeof(long);
     for (size_t i = 0; i < long_shift_cnt; i++){
@@ -148,10 +169,10 @@ void intn_shr_bytes(void *result, const void *val, size_t shift, size_t n){
     }
 }
 
-void intn_shr(void *result, const void *val, size_t shift, size_t n){
+void intn_shr(size_t n, void *result, const void *val, size_t shift){
     size_t shift_bytes = shift / 8;
     if(shift_bytes){
-        intn_shl_bytes(result, val, shift_bytes, n);
+        intn_shr_bytes(n, result, val, shift_bytes);
     }
 
     size_t shift_bits = shift % 8;
@@ -166,27 +187,6 @@ void intn_shr(void *result, const void *val, size_t shift, size_t n){
         curr = ((unsigned char*)result)[i] >> shift_bits;
     }
     ((unsigned char*)result)[0] = curr;
-}
-
-void print_hex(const void *num, size_t n){
-    const unsigned char *num_bytes = num;
-
-    size_t i = 0;
-
-    for (; i < n; i++){
-        if(num_bytes[i]){
-             break;
-        }
-    }
-
-    if(i == n){
-        putchar('0');
-        return;
-    }
-    
-    for (; i < n; i++){
-        printf("%02X", (int)num_bytes[i]);
-    }
 }
 
 static const char *end_of_hexadecimal(const char *str){

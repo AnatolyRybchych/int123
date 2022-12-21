@@ -11,18 +11,18 @@ int main(void){
 
     printf("first:");
     scanf("%10000s", buffer);
-    parse_hex(first, 1024, buffer);
+    intn_parse_hex(1024, first, buffer);
 
     printf("second:");
     scanf("%10000s", buffer);
-    parse_hex(second, 1024, buffer);
+    intn_parse_hex(1024, second, buffer);
 
-    intn_nor(result, first, second, 1024);
+    intn_and(1024, result, first, second);
 
-    intn_shr(result, result, 1, 1024);
+    intn_shl(1024, result, result, 1);
 
     printf("result:");
-    print_hex(result, 1024);
+    intn_print_hex(1024, result);
     printf("\n");
 
     return 0;
