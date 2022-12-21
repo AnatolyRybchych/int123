@@ -9,7 +9,10 @@ static unsigned char from_dec(char ch);
 static unsigned char from_hexadecimal(char ch);
 
 bool parse_hex(void *num, size_t n, const char *str){
+    assert(n < 0x0fffffffffffffff);
+
     unsigned char *num_bytes = num;
+    
     memset(num, 0, n);
 
     size_t curr_semibyte = (n - 1) * 2 + 1;
@@ -27,6 +30,8 @@ bool parse_hex(void *num, size_t n, const char *str){
 }
 
 bool intn_mul(void *restrict result, const void *restrict first, const void *restrict second, size_t n){
+    assert(n < 0x0fffffffffffffff);
+
     unsigned char *result_bytes = result;
     const unsigned char *first_bytes = first;
     const unsigned char *second_bytes = second;
@@ -49,6 +54,22 @@ bool intn_mul(void *restrict result, const void *restrict first, const void *res
         }
     }
     return ret;
+}
+
+bool intn_add(void *restrict result, const void *restrict first, const void *restrict second, size_t n){
+    unsigned char *result_bytes = result;
+    const unsigned char *first_bytes = first;
+    const unsigned char *second_bytes = second;
+
+    memset(result_bytes, 0, n);
+
+    unsigned short int curr = 0;
+    for (size_t i = n - 1; i < n ; i--){
+        curr = curr + first_bytes[i] + second_bytes[i];
+        result_bytes[i] = curr & 0xff;
+        curr >>= 8;
+    }
+    return curr != 0;
 }
 
 void print_hex(const void *num, size_t n){
