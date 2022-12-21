@@ -5,6 +5,7 @@ CARGS   := $(INCLUDE) -ggdb -Wall -Wextra -Werror -pedantic
 OUT     := run
 
 objects += main.o
+objects += int123.o
 
 build: $(addprefix obj/, $(objects))
 	$(CC) $(CARGS) -o ./$(OUT) $^ $(LIBS)
