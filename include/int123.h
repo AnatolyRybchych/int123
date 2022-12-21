@@ -75,6 +75,14 @@ void intn_shl(void *result, const void *val, size_t shift, size_t n);
 void intn_shl_bytes(void *result, const void *val, size_t shift, size_t n);
 
 //n is byte size
+//result = first >> shift
+void intn_shr(void *result, const void *val, size_t shift, size_t n);
+
+//n is byte size
+//result = first >> (shift * 8)
+void intn_shr_bytes(void *result, const void *val, size_t shift, size_t n);
+
+//n is byte size
 void print_hex(const void *num, size_t n);
 
 

@@ -132,6 +132,42 @@ void intn_shl(void *result, const void *val, size_t shift, size_t n){
     ((unsigned char*)result)[n - 1] = curr;
 }
 
+void intn_shr_bytes(void *result, const void *val, size_t shift, size_t n){
+    size_t shift_cnt = n - shift;
+    size_t long_shift_cnt = shift_cnt / sizeof(long);
+    for (size_t i = 0; i < long_shift_cnt; i++){
+        ((unsigned long*)((char*)result + shift))[i] = ((const unsigned long*)(val))[i];
+    }
+
+    for (size_t i = shift_cnt - 1; i < shift_cnt; i--){
+        ((unsigned char*)result + shift)[i] = ((const unsigned char*)val)[i];
+    }
+
+    for (size_t i = 0; i < shift; i++){
+        ((unsigned char*)result)[i] = 0;
+    }
+}
+
+void intn_shr(void *result, const void *val, size_t shift, size_t n){
+    size_t shift_bytes = shift / 8;
+    if(shift_bytes){
+        intn_shl_bytes(result, val, shift_bytes, n);
+    }
+
+    size_t shift_bits = shift % 8;
+    size_t shift_rest = 8 - shift_bits;
+    if(!shift_bits) return;
+
+    unsigned short int curr = 0;
+    curr = ((unsigned char*)result)[n - 1] >> shift_bits;
+    for (size_t i = n - 1; i >= 1; i--){
+        curr |= ((unsigned char*)result)[i] << shift_rest;
+        ((unsigned char*)result)[i + 1] = curr;
+        curr = ((unsigned char*)result)[i] >> shift_bits;
+    }
+    ((unsigned char*)result)[0] = curr;
+}
+
 void print_hex(const void *num, size_t n){
     const unsigned char *num_bytes = num;
 
