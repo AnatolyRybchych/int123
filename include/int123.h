@@ -16,7 +16,7 @@ bool intn_mul(void *restrict result, const void *restrict first, const void *res
 
 //n is byte size
 //returns false if overflow
-bool intn_add(void *restrict result, const void *restrict first, const void *restrict second, size_t n);
+bool intn_add(void *result, const void *first, const void *second, size_t n);
 
 //n is byte size
 //result = first & second

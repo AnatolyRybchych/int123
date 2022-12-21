@@ -82,7 +82,7 @@ bool intn_mul(void *restrict result, const void *restrict first, const void *res
     return ret;
 }
 
-bool intn_add(void *restrict result, const void *restrict first, const void *restrict second, size_t n){
+bool intn_add(void *result, const void *first, const void *second, size_t n){
     unsigned char *result_bytes = result;
     const unsigned char *first_bytes = first;
     const unsigned char *second_bytes = second;
