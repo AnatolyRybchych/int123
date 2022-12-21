@@ -19,6 +19,8 @@ int main(void){
 
     intn_nor(result, first, second, 1024);
 
+    intn_shl(result, result, 2, 1024);
+
     printf("result:");
     print_hex(result, 1024);
     printf("\n");
