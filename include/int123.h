@@ -11,10 +11,60 @@
 bool parse_hex(void *num, size_t n, const char *str);
 
 //n is byte size, n should be < 0x0fffffffffffffff)
+//returns false if overflow
 bool intn_mul(void *restrict result, const void *restrict first, const void *restrict second, size_t n);
 
 //n is byte size
+//returns false if overflow
 bool intn_add(void *restrict result, const void *restrict first, const void *restrict second, size_t n);
+
+//n is byte size
+//result = first & second
+void intn_and(void *result, const void *first, const void *second, size_t n);
+
+//n is byte size
+//result = ~first & second
+void intn_nand(void *result, const void *first, const void *second, size_t n);
+
+//n is byte size
+//result = first & ~second
+void intn_andn(void *result, const void *first, const void *second, size_t n);
+
+//n is byte size
+//result = ~first & ~second
+void intn_nandn(void *result, const void *first, const void *second, size_t n);
+
+//n is byte size
+//result = first | second
+void intn_or(void *result, const void *first, const void *second, size_t n);
+
+//n is byte size
+//result = ~first | second
+void intn_nor(void *result, const void *first, const void *second, size_t n);
+
+//n is byte size
+//result = first | ~second
+void intn_orn(void *result, const void *first, const void *second, size_t n);
+
+//n is byte size
+//result = ~first | ~second
+void intn_norn(void *result, const void *first, const void *second, size_t n);
+
+//n is byte size
+//result = first ^ second
+void intn_xor(void *result, const void *first, const void *second, size_t n);
+
+//n is byte size
+//result = ~first ^ second 
+void intn_nxor(void *result, const void *first, const void *second, size_t n);
+
+//n is byte size
+//result = first ^ ~second
+void intn_xorn(void *result, const void *first, const void *second, size_t n);
+
+//n is byte size
+//result = ~first ^ ~second
+void intn_nxorn(void *result, const void *first, const void *second, size_t n);
 
 //n is byte size
 void print_hex(const void *num, size_t n);

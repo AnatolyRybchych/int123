@@ -1,5 +1,18 @@
 #include <int123.h>
 
+#define IMPL_BIT_OPERATION(NAME, FIRST_OP, OPERATOR, SECOND_OP)\
+void intn_##NAME(void *result, const void *first, const void *second, size_t n){\
+    size_t long_size = n / sizeof(long);\
+    for (size_t i = 0; i < long_size; i++){\
+        ((unsigned long*)result)[i] =\
+            (FIRST_OP((const unsigned long*)first)[i]) OPERATOR (SECOND_OP((const unsigned long*)second)[i]);\
+    }\
+    for (size_t i = long_size * sizeof(long); i < n; i++){\
+        ((unsigned char*)result)[i] =\
+            (FIRST_OP ((const unsigned char *)first)[i]) OPERATOR (SECOND_OP((const unsigned char *)second)[i]);\
+    }\
+}
+
 static const char *end_of_hexadecimal(const char *str);
 static bool is_dec(char ch);
 static bool is_hex_lower(char ch);
@@ -8,11 +21,24 @@ static bool is_hexadecimal(char ch);
 static unsigned char from_dec(char ch);
 static unsigned char from_hexadecimal(char ch);
 
+IMPL_BIT_OPERATION(and, ,&,)
+IMPL_BIT_OPERATION(nand, ~,&,)
+IMPL_BIT_OPERATION(andn, ,&,~)
+IMPL_BIT_OPERATION(nandn, ~,&,~)
+IMPL_BIT_OPERATION(or, , |, )
+IMPL_BIT_OPERATION(nor, ~, |, )
+IMPL_BIT_OPERATION(orn, , |, ~)
+IMPL_BIT_OPERATION(norn, ~, |, ~)
+IMPL_BIT_OPERATION(xor, , ^, )
+IMPL_BIT_OPERATION(nxor, ~, ^, )
+IMPL_BIT_OPERATION(xorn, , ^, ~)
+IMPL_BIT_OPERATION(nxorn, ~, ^, ~)
+
 bool parse_hex(void *num, size_t n, const char *str){
     assert(n < 0x0fffffffffffffff);
 
     unsigned char *num_bytes = num;
-    
+
     memset(num, 0, n);
 
     size_t curr_semibyte = (n - 1) * 2 + 1;
@@ -71,6 +97,7 @@ bool intn_add(void *restrict result, const void *restrict first, const void *res
     }
     return curr != 0;
 }
+
 
 void print_hex(const void *num, size_t n){
     const unsigned char *num_bytes = num;

@@ -17,7 +17,7 @@ int main(void){
     scanf("%10000s", buffer);
     parse_hex(second, 1024, buffer);
 
-    intn_mul(result, first, second, 1024);
+    intn_nor(result, first, second, 1024);
 
     printf("result:");
     print_hex(result, 1024);
