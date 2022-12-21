@@ -6,6 +6,15 @@
 #include <assert.h>
 #include <stdio.h>
 
+/*
+    numbers are unsigned n-bytes size integers
+
+TODO:
+    operations: sub, mod, div, 
+    maybe: pow, comparations
+*/
+
+
 //n is byte size, n should be < 0x0fffffffffffffff)
 //returns false if overflow
 bool intn_parse_hex(size_t n, void *num, const char *str);
