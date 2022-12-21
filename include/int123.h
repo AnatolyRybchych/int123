@@ -10,6 +10,8 @@
 //returns false if overflow
 bool parse_hex(void *num, size_t n, const char *str);
 
+bool intn_mul(void *restrict result, const void *restrict first, const void *restrict second, size_t n);
+
 //n is byte size
 void print_hex(const void *num, size_t n);
 
